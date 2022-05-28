@@ -1,11 +1,12 @@
 import React, { Component } from "react";
+import Speech from 'speak-tts';
 import SpeechToText from 'speech-to-text';
 import SupportedLanguages from '../../assets/SupportedLanguages';
 import IAResponses from '../../assets/IAResponses';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMicrophone, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import './index.css';
-import { wait } from "@testing-library/user-event/dist/utils";
+const speech = new Speech();
 
 export default class Index extends Component {
     state = {
@@ -20,7 +21,31 @@ export default class Index extends Component {
         Stream: {},
     };
 
-    addMessage = (message, author = 'user') => {
+    SayMessage = text => {
+        this.listener.stopListening();
+        this.setState({ Listening: false });
+
+        speech.setRate(1.5);
+        speech.setVolume(1);
+        speech.setPitch(0);
+        speech.setLanguage('pt-BR');
+        speech.speak({
+            text: text,
+            queue: true,
+            listeners: {
+                onend: () => {
+                    if (!speech.speaking()) {
+                        this.listener.startListening();
+                        this.setState({ Listening: true });
+                    }
+                }
+            }
+        }).catch(err => {
+            console.error(err);
+        })
+    }
+
+    addMessage = (message, author = 'user', say = false) => {
         if (typeof message === 'string') {
             this.setState({
                 FinalisedText: [{ message: message, author: author }, ...this.state.FinalisedText],
@@ -41,6 +66,12 @@ export default class Index extends Component {
             if (this.state.FinalisedText.length > 3) {
                 document.getElementById("chat_table").scrollTop = document.getElementById("chat_table").scrollHeight;
             }
+
+            if (say) {
+                message.reverse().forEach(Message => {
+                    this.SayMessage(Message.message);
+                });
+            }
         }
     }
 
@@ -51,7 +82,7 @@ export default class Index extends Component {
             .catch((err) => {
                 console.error(err);
                 if (err.message === "Permission denied" && this.state.Error !== "This browser doesn't support speech recognition. Try Google Chrome.") {
-                    this.addMessage(`<p style="color: #FF0000; text-align: center">HABILITE SEU <b>MICROFONE</b></p>`, 'system');
+                    this.addMessage(`<p style="color: #FF0000; text-align: center">HABILITE SEU <b>MICROFONE</b></p>`, 'system', true);
                     this.state.Listening = false;
                 }
             });
@@ -83,12 +114,8 @@ export default class Index extends Component {
             });
 
             if (ResponseMessage.length > 0) {
-                this.addMessage(ResponseMessage, 'system');
+                this.addMessage(ResponseMessage, 'system', true);
             }
-
-            /*if (ResponseMessage !== '') {
-                this.addMessage(ResponseMessage, 'system');
-            }*/
         }, 1000);
     };
 
@@ -116,7 +143,7 @@ export default class Index extends Component {
 
         } catch (err) {
             if (err.message === "This browser doesn't support speech recognition. Try Google Chrome.") {
-                this.addMessage(`<p style="color: #FF0000; text-align: center">ESTE NAVEGADOR NÃO SUPORTA RECONHECIMENTO DE FALA. RECOMENDAMOS A UTILIZAÇÃO DO <b>GOOGLE CHROME</b></p>`);
+                this.addMessage(`<p style="color: #FF0000; text-align: center">ESTE NAVEGADOR NÃO SUPORTA RECONHECIMENTO DE FALA. RECOMENDAMOS A UTILIZAÇÃO DO <b>GOOGLE CHROME</b></p>`, 'system');
             }
 
             this.state.Error = err.message;
@@ -192,7 +219,7 @@ export default class Index extends Component {
                     <div className="main">
                         <div className="panel">
                             <div className="header">
-                                <p>Avaliação 3 - Inteligência Artificial</p>
+                                <p onClick={() => this.SayMessage('Teste')}>Avaliação 3 - Inteligência Artificial</p>
                             </div>
                             <div className="content">
                                 <div className="steps">
@@ -206,24 +233,24 @@ export default class Index extends Component {
                                 </div>
                                 <div className="controls">
                                     <span className="control">
-                                        <FontAwesomeIcon className="trash" icon={faTrashCan} onClick={() => (this.clearChat())} />
+                                        <FontAwesomeIcon className="trash" icon={faTrashCan} onClick={() => (!speech.speaking() && (this.clearChat()))} />
                                     </span>
                                     {Listening ?
                                         <span className="control">
-                                            <FontAwesomeIcon className="microphone" icon={faMicrophone} style={{ color: "#017D0C" }} onClick={() => (this.getLocalStream(), this.stopListening())} />
+                                            <FontAwesomeIcon className="microphone" icon={faMicrophone} style={{ color: "#017D0C" }} onClick={() => (!speech.speaking() && (this.getLocalStream(), this.stopListening()))} />
                                         </span>
                                         :
                                         <span className="control">
-                                            <FontAwesomeIcon className="microphone" icon={faMicrophone} style={{ color: "#7D0101" }} onClick={() => (this.getLocalStream(), this.startListening())} />
+                                            <FontAwesomeIcon className="microphone" icon={faMicrophone} style={{ color: "#7D0101" }} onClick={() => (!speech.speaking() && (this.getLocalStream(), this.startListening()))} />
                                         </span>
                                     }
-                                    <select className="control" value={Language} disabled={Listening} onChange={evt => this.setState({ Language: evt.target.value })}>
+                                    {/*<select className="control" value={Language} disabled={Listening} onChange={evt => this.setState({ Language: evt.target.value })}>
                                         {SupportedLanguages.map(Language => (
                                             <option key={Language[1]} value={Language[1]}>
                                                 {Language[0]}
                                             </option>
                                         ))}
-                                    </select>
+                                    </select>*/}
                                 </div>
                             </div>
                             <div className="chat">
