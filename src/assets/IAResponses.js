@@ -99,7 +99,7 @@ async function IAResponses(text) {
             text = text.replace(new RegExp('[Ç]', 'gmi'), 'C');
 
             Trigger = new RegExp(`${Trigger}`, 'gmi');
-
+            
             if (Trigger.test(text)) {
                 const Response = Math.floor(Math.random() * ResponseData.response.length);
                 ResponseMessage = [{ message: ResponseData.response[Response], author: 'system' }, ...ResponseMessage];
