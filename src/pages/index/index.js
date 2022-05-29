@@ -98,24 +98,15 @@ export default class Index extends Component {
         }
     };
 
-    onFinalised = text => {
+    onFinalised = async (text) => {
         this.addMessage(text);
 
         setTimeout(() => {
-            let ResponseMessage = [];
-            IAResponses.IAResponses().map(ResponseData => {
-                ResponseData.trigger.map(Trigger => {
-                    Trigger = new RegExp(`${Trigger}`, 'gmi');
-                    if (Trigger.test(text)) {
-                        const Response = Math.floor(Math.random() * ResponseData.response.length);
-                        ResponseMessage = [{message: ResponseData.response[Response], author: 'system'}, ...ResponseMessage];
-                    }
-                })
+            IAResponses.IAResponses(text).then(ResponseMessage => {
+                if (ResponseMessage.length > 0) {
+                    this.addMessage(ResponseMessage, 'system', true);
+                }
             });
-
-            if (ResponseMessage.length > 0) {
-                this.addMessage(ResponseMessage, 'system', true);
-            }
         }, 1000);
     };
 
