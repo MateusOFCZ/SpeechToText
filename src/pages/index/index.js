@@ -81,6 +81,7 @@ export default class Index extends Component {
             })
             .catch((err) => {
                 console.error(err);
+
                 if (err.message === "Permission denied" && this.state.Error !== "This browser doesn't support speech recognition. Try Google Chrome.") {
                     this.addMessage(`<p style="color: #FF0000; text-align: center">HABILITE SEU <b>MICROFONE</b></p>`, 'system', true);
                     this.state.Listening = false;
@@ -187,6 +188,7 @@ export default class Index extends Component {
                 );
 
             } catch (err) {
+                console.log(err);
                 this.state.Error = err.message;
             }
             this.state.Loaded = true;
