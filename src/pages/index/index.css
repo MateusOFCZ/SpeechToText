@@ -109,6 +109,7 @@
     width: 50vw;
     border-radius: 1vw 1vw 0 1vw;
     background-color: #1111112A;
+    box-shadow: 0 0 5vw 0vw #7C7C7C;
 }
 
 .index .main .panel .header {

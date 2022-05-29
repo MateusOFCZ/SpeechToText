@@ -31,19 +31,23 @@ async function GetCurrentTime() {
     let Hour = await moment().tz("America/Sao_Paulo").format('HH');
 
     if (Hour >= 18 && Hour <= 4) {
-        return `uma boa noite`;
+        return { prefix: `uma`, time: `boa noite` };
     } else if (Hour >= 12 && Hour <= 17) {
-        return `uma boa tarde`;
+        return { prefix: `uma`, time: `boa tarde` };
     } else {
-        return `um bom dia`;
+        return { prefix: `um`, time: `bom dia` };
     }
+}
+
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 async function IAData() {
     const Data = [
         {
             trigger: [`OI`, `OLA`, `BOM DIA`, `BOA TARDE`, `BOA NOITE`],
-            response: [`Oie!`, `Olá!`, `Oii!`]
+            response: [`Oi!`, `Olá!`, `${capitalizeFirstLetter((await GetCurrentTime()).time)}!`]
         },
         {
             trigger: [`COMO VAI`, `TUDO BEM`, `COMO VOCE ESTA`, `COMO VOCE TA`],
@@ -67,11 +71,11 @@ async function IAData() {
         },
         {
             trigger: [`PREVISAO DO TEMPO PARA HOJE`, `PREVISÃO DO TEMPO DE HOJE`, `PREVISAO DO TEMPO HOJE`],
-            response: [`A previsão do tempo para hoje em ${await UserData.Weather.name} é de ${await UserData.Weather.main.temp} graus e ${await UserData.Weather.weather[0].description}, com mínima de ${await UserData.Weather.main.temp_min} graus e máxima de ${await UserData.Weather.main.temp_max} graus. Tenha ${await GetCurrentTime()}.`, `A previsão do tempo para hoje em ${await UserData.Weather.name} é de ${await UserData.Weather.main.temp} graus e ${await UserData.Weather.weather[0].description}, com mínima de ${await UserData.Weather.main.temp_min} graus e máxima de ${await UserData.Weather.main.temp_max} graus.`]
+            response: [`A previsão do tempo para hoje em ${await UserData.Weather.name} é de ${await UserData.Weather.main.temp} graus e ${await UserData.Weather.weather[0].description}, com mínima de ${await UserData.Weather.main.temp_min} graus e máxima de ${await UserData.Weather.main.temp_max} graus. Tenha ${(await GetCurrentTime()).prefix} ${(await GetCurrentTime()).time}.`, `A previsão do tempo para hoje em ${await UserData.Weather.name} é de ${await UserData.Weather.main.temp} graus e ${await UserData.Weather.weather[0].description}, com mínima de ${await UserData.Weather.main.temp_min} graus e máxima de ${await UserData.Weather.main.temp_max} graus.`]
         },
         {
             trigger: [`SENSACAO TERMICA PARA HOJE`, `SENSACAO TERMICA DE HOJE`, `SENSACAO TERMICA HOJE`],
-            response: [`A temperatura em ${await UserData.Weather.name} é de ${await UserData.Weather.main.temp} graus com sensação térmica de ${await UserData.Weather.main.feels_like} graus. Tenha ${await GetCurrentTime()}.`, `A temperatura em ${await UserData.Weather.name} é de ${await UserData.Weather.main.temp} graus com sensação térmica de ${await UserData.Weather.main.feels_like} graus.`]
+            response: [`A temperatura em ${await UserData.Weather.name} é de ${await UserData.Weather.main.temp} graus com sensação térmica de ${await UserData.Weather.main.feels_like} graus. Tenha ${(await GetCurrentTime()).prefix} ${(await GetCurrentTime()).time}.`, `A temperatura em ${await UserData.Weather.name} é de ${await UserData.Weather.main.temp} graus com sensação térmica de ${await UserData.Weather.main.feels_like} graus.`]
         },
     ]
 
