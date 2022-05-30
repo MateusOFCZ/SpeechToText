@@ -62,15 +62,15 @@ export default class Index extends Component {
                 HistoryText: [...message, ...this.state.FinalisedText].reverse(),
                 InterimText: ''
             });
-    
-            if (this.state.FinalisedText.length > 3) {
-                document.getElementById("chat_table").scrollTop = document.getElementById("chat_table").scrollHeight;
-            }
 
             if (say) {
                 message.reverse().forEach(Message => {
                     this.SayMessage(Message.message);
                 });
+            }
+
+            if (this.state.FinalisedText.length > 3) {
+                document.getElementById("chat_table").scrollTop = document.getElementById("chat_table").scrollHeight;
             }
         }
     }
