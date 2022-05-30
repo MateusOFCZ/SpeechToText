@@ -21,28 +21,50 @@ export default class Index extends Component {
         Stream: {},
     };
 
+    SetListening = type => {
+        if (type) {
+            let Microphone_On = new Audio('../../assets/Microphone_On.mp3');
+            this.setState({ Listening: true });
+            Microphone_On.play();
+
+            setTimeout(() => {
+                Microphone_On.pause();
+            }, 900);
+        } else {
+            let Microphone_Off = new Audio('../../assets/Microphone_Off.mp3');
+            this.setState({ Listening: false });
+            Microphone_Off.play();
+
+            setTimeout(() => {
+                Microphone_Off.pause();
+            }, 900);
+        }
+    }
+
     SayMessage = text => {
         this.listener.stopListening();
-        this.setState({ Listening: false });
+        this.SetListening(false);
 
-        speech.setRate(1.5);
-        speech.setVolume(1);
-        speech.setPitch(0);
-        speech.setLanguage('pt-BR');
-        speech.speak({
-            text: text,
-            queue: true,
-            listeners: {
-                onend: () => {
-                    if (!speech.speaking()) {
-                        this.listener.startListening();
-                        this.setState({ Listening: true });
+        setTimeout(() => {
+            speech.setRate(1.5);
+            speech.setVolume(1);
+            speech.setPitch(0);
+            speech.setLanguage('pt-BR');
+            speech.speak({
+                text: text,
+                queue: true,
+                listeners: {
+                    onend: () => {
+                        if (!speech.speaking()) {
+                            this.listener.startListening();
+                            this.SetListening(true);
+                        }
                     }
                 }
-            }
-        }).catch(err => {
-            console.error(err);
-        })
+            }).catch(err => {
+                console.error(err);
+            })
+        }, 1000);
     }
 
     addMessage = (message, author = 'user', say = false) => {
@@ -52,11 +74,13 @@ export default class Index extends Component {
                 HistoryText: [{ message: message, author: author }, ...this.state.FinalisedText].reverse(),
                 InterimText: ''
             });
-    
-            if (this.state.FinalisedText.length > 3) {
-                document.getElementById("chat_table").scrollTop = document.getElementById("chat_table").scrollHeight;
-            }
-        } else if(typeof message === 'object') {
+
+            setTimeout(() => {
+                if (this.state.FinalisedText.length > 3) {
+                    document.getElementById("chat_table").scrollTop = document.getElementById("chat_table").scrollHeight;
+                }
+            }, 100);
+        } else if (typeof message === 'object') {
             this.setState({
                 FinalisedText: [...message, ...this.state.FinalisedText],
                 HistoryText: [...message, ...this.state.FinalisedText].reverse(),
@@ -69,9 +93,11 @@ export default class Index extends Component {
                 });
             }
 
-            if (this.state.FinalisedText.length > 3) {
-                document.getElementById("chat_table").scrollTop = document.getElementById("chat_table").scrollHeight;
-            }
+            setTimeout(() => {
+                if (this.state.FinalisedText.length > 3) {
+                    document.getElementById("chat_table").scrollTop = document.getElementById("chat_table").scrollHeight;
+                }
+            }, 100);
         }
     }
 
@@ -145,7 +171,7 @@ export default class Index extends Component {
 
     stopListening = () => {
         this.listener.stopListening();
-        this.setState({ Listening: false });
+        this.SetListening(false);
 
         let headTitle = document.querySelector('head');
         let setAFavicon = document.createElement('link');
@@ -234,7 +260,7 @@ export default class Index extends Component {
                                         </span>
                                         :
                                         <span className="control">
-                                            <FontAwesomeIcon className="microphone" icon={faMicrophone} style={{ color: "#7D0101" }} onClick={() => (!speech.speaking() && (this.getLocalStream(), this.startListening()))} />
+                                            <FontAwesomeIcon className="microphone" icon={faMicrophone} style={{ color: "#7D0101" }} onClick={() => (!speech.speaking() && (this.getLocalStream(), this.SetListening(true), this.startListening()))} />
                                         </span>
                                     }
                                     {/*<select className="control" value={Language} disabled={Listening} onChange={evt => this.setState({ Language: evt.target.value })}>
