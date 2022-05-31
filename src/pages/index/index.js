@@ -152,13 +152,6 @@ export default class Index extends Component {
 
             this.listener.startListening();
             this.setState({ Listening: true });
-
-            let headTitle = document.querySelector('head');
-            let setAFavicon = document.createElement('link');
-            setAFavicon.setAttribute('rel', 'favicon-green');
-            setAFavicon.setAttribute('href', '../../public/Favicon_Green.ico');
-            headTitle.appendChild(setAFavicon);
-
         } catch (err) {
             if (err.message === "This browser doesn't support speech recognition. Try Google Chrome.") {
                 this.addMessage(`<p style="color: #FF0000; text-align: center">ESTE NAVEGADOR NÃO SUPORTA RECONHECIMENTO DE FALA. RECOMENDAMOS A UTILIZAÇÃO DO <b>GOOGLE CHROME</b></p>`, 'system');
@@ -172,12 +165,6 @@ export default class Index extends Component {
     stopListening = () => {
         this.listener.stopListening();
         this.SetListening(false);
-
-        let headTitle = document.querySelector('head');
-        let setAFavicon = document.createElement('link');
-        setAFavicon.setAttribute('rel', 'favicon-green');
-        setAFavicon.setAttribute('href', '../../assets/Favicon_Red.ico');
-        headTitle.appendChild(setAFavicon);
     };
 
     clearChat = () => {

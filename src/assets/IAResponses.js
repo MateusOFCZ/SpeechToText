@@ -29,10 +29,10 @@ navigator.geolocation.getCurrentPosition(SaveGeolocation);
 
 async function GetCurrentTime() {
     let Hour = await moment().tz("America/Sao_Paulo").format('HH');
-
-    if (Hour >= 18 && Hour <= 4) {
+    console.log(Hour);
+    if ([19, 20, 21, 22, 23, 0, 1, 2, 3].includes(parseInt(Hour))) {
         return { prefix: `uma`, time: `boa noite` };
-    } else if (Hour >= 12 && Hour <= 17) {
+    } else if ([12, 13, 14, 15, 16, 17, 18].includes(parseInt(Hour))) {
         return { prefix: `uma`, time: `boa tarde` };
     } else {
         return { prefix: `um`, time: `bom dia` };
