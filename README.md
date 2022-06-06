@@ -4,6 +4,7 @@ Converte fala para texto, podendo ser adicionado triggers e responses para respo
 
 # Configuração
 Para instalar as dependências utilize `npm install`.
+
 Para rodar o projeto utilize `npm start`.
 
 Recomendamos o navegador [Google Chrome](https://www.google.com/intl/pt-BR/chrome/) para rodar o projeto, habilite o microfone e localização.
