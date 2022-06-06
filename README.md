@@ -1,6 +1,7 @@
 <p align="center">
   <img src="https://i.imgur.com/WWC94g6.png" alt="Speech To Text Logo"/>
 </p>
+
 Projeto em ReactJS simulando uma inteligência como a [Alexa](https://www.amazon.com.br/b?ie=UTF8&node=21215956011).
 Converte fala para texto, podendo ser adicionado triggers e responses para responder e executar ações de acordo com o que o usuário solicitar.
 
