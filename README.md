@@ -6,7 +6,7 @@ Projeto em ReactJS simulando uma inteligência como a [Alexa](https://www.amazon
 Converte fala para texto, podendo ser adicionado triggers e responses para responder e executar ações de acordo com o que o usuário solicitar.
 
 <p align="left">
-  <img src="https://i.imgur.com/o7dXHXy.png" alt="Speech To Text Settings"/>
+  <img src="https://i.imgur.com/tGQU2Ii.png" alt="Speech To Text Settings"/>
 </p>
 Para instalar as dependências utilize `npm install`.
 
