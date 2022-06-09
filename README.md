@@ -15,4 +15,4 @@ Converte fala para texto, podendo ser adicionado triggers e responses para respo
 - Para instalar as dependências utilize `npm install`.
 - Para rodar o projeto utilize `npm start`.
 - Recomendamos o navegador [Google Chrome](https://www.google.com/intl/pt-BR/chrome/) para rodar o projeto, habilite o microfone e localização.
-- Você pode adicionar novas triggers e responses no arquivo **[IAResponses.js](https://github.com/MateusOFCZ/SpeechToText/blob/master/src/assets/IAResponses.js)**.
+- Você pode adicionar novas triggers e responses no arquivo **[IAResponses.js](https://github.com/MateusOFCZ/SpeechToText/blob/master/src/assets/IAResponses.js#L46)**.
